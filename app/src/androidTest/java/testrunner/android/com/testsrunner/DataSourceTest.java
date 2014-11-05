@@ -11,8 +11,8 @@ public class DataSourceTest extends AndroidTestCase {
 
 
     public static final String NAME = "TestName1";
-    public static final String TEST_NAME_2 = "TestName2";
-    public static final String TEST_NAME_3 = "TestName3";
+    public static final String NAME_1 = "TestName2";
+    public static final String NAME_2 = "TestName3";
     private DataSource mDataSource;
 
     @Override
@@ -43,16 +43,16 @@ public class DataSourceTest extends AndroidTestCase {
 
     public void test_deleteAll(){
         mDataSource.insert(NAME);
-        mDataSource.insert(TEST_NAME_2);
-        mDataSource.insert(TEST_NAME_3);
+        mDataSource.insert(NAME_1);
+        mDataSource.insert(NAME_2);
         mDataSource.deleteAll();
         assertTrue(mDataSource.getAllData().isEmpty());
     }
 
     public void test_getAllData(){
         mDataSource.insert(NAME);
-        mDataSource.insert(TEST_NAME_2);
-        mDataSource.insert(TEST_NAME_3);
+        mDataSource.insert(NAME_1);
+        mDataSource.insert(NAME_2);
         assertTrue(mDataSource.getAllData().size() == 3);
     }
 }
