@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="F:\testrunner\TestsRunner\app\build\intermediates\pre-dexed\debug\robotium-solo-5.2.1-a35747858dba44faf802b03653a7b1d7b6cbbf7c.jar"
+        jar="F:\testrunner\TestsRunner\app\libs\robotium-solo-5.2.1.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="56ab8d87d966a067ee3795ee137fbd51b6581ec9"/>
+
+</pre-dex-items>

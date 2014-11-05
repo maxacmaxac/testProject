@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TestsRunner</string>
+    <string name="action_settings">Settings</string>
+    <string name="hint_edit_text">Email name</string>
+    <string name="button_name">Search</string>
+    <string name="error_message">Please enter search word</string>
+
+</resources>
