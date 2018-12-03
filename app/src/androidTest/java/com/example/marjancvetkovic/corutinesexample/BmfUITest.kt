@@ -1,10 +1,15 @@
 package com.example.marjancvetkovic.corutinesexample
 
-import com.example.marjancvetkovic.corutinesexample.BaseTest
-import com.example.marjancvetkovic.corutinesexample.R
 import org.junit.Test
 
 class BmfUITest : BaseTest() {
+    companion object {
+        const val RECYCLER_VIEW_SIZE_0 = 0
+        const val RECYCLER_VIEW_SIZE_3 = 3
+
+        const val FILE_OK_RESPONSE_PATH = "response_ok.json"
+        const val FILE_BAD_RESPONSE_PATH = "response_bad.json"
+    }
 
     @Test
     fun testRecyclerViewSizeResponseOK() {
@@ -12,7 +17,7 @@ class BmfUITest : BaseTest() {
 
         launchMainActivity()
 
-        assertRecyclerViewSize(R.id.listView, BaseTest.RECYCLER_VIEW_SIZE_3)
+        assertRecyclerViewSize(R.id.listView, RECYCLER_VIEW_SIZE_3)
     }
 
     @Test
@@ -21,6 +26,6 @@ class BmfUITest : BaseTest() {
 
         launchMainActivity()
 
-        assertRecyclerViewSize(R.id.listView, BaseTest.RECYCLER_VIEW_SIZE_0)
+        assertRecyclerViewSize(R.id.listView, RECYCLER_VIEW_SIZE_0)
     }
 }

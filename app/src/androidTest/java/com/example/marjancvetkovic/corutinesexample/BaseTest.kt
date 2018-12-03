@@ -25,31 +25,23 @@ import org.junit.Before
 import java.io.IOException
 
 open class BaseTest {
-    companion object {
-        const val RECYCLER_VIEW_SIZE_0 = 0
-        const val RECYCLER_VIEW_SIZE_3 = 3
-
-        const val FILE_OK_RESPONSE_PATH = "response_ok.json"
-        const val FILE_BAD_RESPONSE_PATH = "response_bad.json"
-    }
-
     @JvmField
-    val mActivityRuleMainActivity = ActivityTestRule(MainActivity::class.java, true, false)
+    val activityRuleMainActivity = ActivityTestRule(MainActivity::class.java, true, false)
 
-    private lateinit var mTargetContext: Context
-    private lateinit var mMockedWebServer: MockWebServer
+    private lateinit var targetContext: Context
+    private lateinit var mockedWebServer: MockWebServer
     private lateinit var bmfDao: BmfDao
 
     @Before
     fun setup() {
         val mInstrumentation = InstrumentationRegistry.getInstrumentation()
-        mTargetContext = mInstrumentation.targetContext
+        targetContext = mInstrumentation.targetContext
 
-        bmfDao = AppDatabase.getInstance(mTargetContext).officeDao()
+        bmfDao = AppDatabase.getInstance(targetContext).officeDao()
 
         bmfDao.deleteAll()
 
-        mTargetContext.getSharedPreferences("main", Context.MODE_PRIVATE).edit {
+        targetContext.getSharedPreferences("main", Context.MODE_PRIVATE).edit {
             putLong(BmfRepo.BMF_LIST_KEY, 0)
         }
     }
@@ -61,7 +53,7 @@ open class BaseTest {
         } catch (e: IOException) {
             ""
         }
-        mMockedWebServer.enqueue(
+        mockedWebServer.enqueue(
             MockResponse()
                 .setResponseCode(200)
                 .setBody(response)
@@ -70,19 +62,19 @@ open class BaseTest {
     }
 
     private fun mockWebServer() {
-        mMockedWebServer = MockWebServer()
+        mockedWebServer = MockWebServer()
         try {
-            mMockedWebServer.start()
+            mockedWebServer.start()
         } catch (e: IOException) {
             Log.e("", e.message)
         }
 
-        BmfApi.BASE_URL = mMockedWebServer.url("/").toString()
+        BmfApi.BASE_URL = mockedWebServer.url("/").toString()
     }
 
     fun launchMainActivity() {
         val intent = Intent()
-        mActivityRuleMainActivity.launchActivity(intent)
+        activityRuleMainActivity.launchActivity(intent)
     }
 
     private fun checkListViewSize(size: Int): Matcher<View> {
