@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.marjancvetkovic.corutinesexample.MainApplication
 import com.example.marjancvetkovic.corutinesexample.R
 import com.example.marjancvetkovic.corutinesexample.db.BmfRepo
@@ -47,6 +48,9 @@ class BmfListFragment : androidx.fragment.app.Fragment() {
             )
         )
         officeViewModel.getBmfs().observe(this, Observer { data -> data?.let { adapter.setData(it) } })
+        officeViewModel.getDataState()
+            .observe(this,
+                Observer { state -> if (!state) Toast.makeText(context, "Error", Toast.LENGTH_LONG).show() })
     }
 
     companion object {
