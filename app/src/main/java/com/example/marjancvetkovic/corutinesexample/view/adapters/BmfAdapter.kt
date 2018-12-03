@@ -1,17 +1,17 @@
 package com.example.marjancvetkovic.corutinesexample.view.adapters
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
-import android.support.v7.widget.RecyclerView
+import androidx.constraintlayout.widget.ConstraintLayout
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.example.marjancvetkovic.corutinesexample.R
 import com.example.marjancvetkovic.corutinesexample.model.Bmf
 import kotlinx.android.synthetic.main.bmf_row.view.*
 
-class BmfAdapter : RecyclerView.Adapter<SimpleViewHolder>() {
+class BmfAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<SimpleViewHolder>() {
 
-    var dataList: List<Bmf> = arrayListOf()
+    private var dataList: List<Bmf> = arrayListOf()
 
     fun setData(data: List<Bmf>) {
         dataList = data
@@ -32,7 +32,7 @@ class BmfAdapter : RecyclerView.Adapter<SimpleViewHolder>() {
     }
 }
 
-class SimpleViewHolder(view: View) : RecyclerView.ViewHolder(checkNotNull(view))
+class SimpleViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
 class BmfItem(context: Context) : ConstraintLayout(context) {
     init {

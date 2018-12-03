@@ -1,6 +1,7 @@
 package com.example.marjancvetkovic.corutinesexample.db
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.example.marjancvetkovic.corutinesexample.model.Bmf
 import com.example.marjancvetkovic.corutinesexample.network.BmfApi
 import java.util.concurrent.TimeUnit
@@ -14,8 +15,7 @@ class BmfRepo(
             val offices = bmfApi.getBmfOffices()
             bmfDao.deleteAll()
             bmfDao.insertAll(offices.await())
-            sharedPreferences.edit().putLong(BMF_LIST_KEY, System.currentTimeMillis() + TimeUnit.HOURS.toMillis(4))
-                .apply()
+            sharedPreferences.edit { putLong(BMF_LIST_KEY, System.currentTimeMillis() + TimeUnit.HOURS.toMillis(4)) }
         }
         return bmfDao.allOffices
     }

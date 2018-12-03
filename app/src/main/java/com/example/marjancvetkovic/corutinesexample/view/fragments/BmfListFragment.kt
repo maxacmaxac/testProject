@@ -1,11 +1,11 @@
 package com.example.marjancvetkovic.corutinesexample.view.fragments
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +18,7 @@ import com.example.marjancvetkovic.corutinesexample.viewModel.BmfViewModel
 import kotlinx.android.synthetic.main.list_fragment.*
 import javax.inject.Inject
 
-class BmfListFragment : Fragment() {
+class BmfListFragment : androidx.fragment.app.Fragment() {
 
     @Inject
     lateinit var bmfModelFactory: BmfModelFactory
@@ -39,8 +39,13 @@ class BmfListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val adapter = BmfAdapter()
         listView.adapter = adapter
-        listView.layoutManager = LinearLayoutManager(context)
-        listView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        listView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
+        listView.addItemDecoration(
+            androidx.recyclerview.widget.DividerItemDecoration(
+                context,
+                androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
+            )
+        )
         officeViewModel.getBmfs().observe(this, Observer { data -> data?.let { adapter.setData(it) } })
     }
 

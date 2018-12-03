@@ -1,7 +1,7 @@
 package com.example.marjancvetkovic.corutinesexample
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.example.marjancvetkovic.corutinesexample.view.fragments.BmfListFragment
 
 class MainActivity : AppCompatActivity() {

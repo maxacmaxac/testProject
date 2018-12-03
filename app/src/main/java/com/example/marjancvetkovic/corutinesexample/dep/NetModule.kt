@@ -1,6 +1,7 @@
 package com.example.marjancvetkovic.corutinesexample.dep
 
 import com.example.marjancvetkovic.corutinesexample.network.BmfApi
+import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -21,13 +22,13 @@ class NetModule {
             .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-            .addNetworkInterceptor { chain ->
-                val builder = chain.request().newBuilder()
-                builder.addHeader("Authorization", "MyauthHeaderContent")
-                chain.proceed(builder.build())
-            }
+            .addInterceptor(ResponseInterceptor())
+//            .addNetworkInterceptor { chain ->
+//                val builder = chain.request().newBuilder()
+//                builder.addHeader("Authorization", "MyauthHeaderContent")
+//                chain.proceed(builder.build())
+//            }
             .build()
-
 
     @Provides
     @Singleton
@@ -44,5 +45,13 @@ class NetModule {
 
     companion object {
         private const val DEFAULT_TIMEOUT: Long = 60
+    }
+}
+
+class ResponseInterceptor : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        return chain.proceed(chain.request()).newBuilder()
+            .addHeader("Content-Type", "application/json; charset=iso-8859-1")
+            .build()
     }
 }

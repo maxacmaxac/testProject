@@ -1,7 +1,7 @@
 package com.example.marjancvetkovic.corutinesexample.viewModel
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.marjancvetkovic.corutinesexample.db.BmfRepo
 import com.example.marjancvetkovic.corutinesexample.model.Bmf
 import kotlinx.coroutines.CoroutineScope
