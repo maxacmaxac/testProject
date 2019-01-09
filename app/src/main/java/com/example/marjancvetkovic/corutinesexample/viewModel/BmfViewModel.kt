@@ -1,7 +1,5 @@
 package com.example.marjancvetkovic.corutinesexample.viewModel
 
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.marjancvetkovic.corutinesexample.db.BmfRepo
@@ -17,22 +15,19 @@ class BmfViewModel() : ViewModel(), CoroutineScope {
 
     private val job = Job()
     override val coroutineContext = job + Dispatchers.IO
-    private var officesLiveData: MutableLiveData<List<Bmf>> = MutableLiveData()
-    private val dataState: MutableLiveData<Boolean> = MutableLiveData()
+    private var officesLiveData: MutableLiveData<Response> = MutableLiveData()
 
     @Inject
     constructor(bmfRepo: BmfRepo) : this() {
         launch {
             try {
-                officesLiveData.postValue(bmfRepo.getOffices())
-                dataState.postValue(true)
+                officesLiveData.postValue(Response(bmfRepo.getOffices()))
             } catch (e: Exception) {
-                dataState.postValue(false)
+                officesLiveData.postValue(Response(error = e))
             }
         }
     }
 
-    fun getDataState() = dataState
 
     fun getBmfs() = officesLiveData
 
@@ -41,3 +36,5 @@ class BmfViewModel() : ViewModel(), CoroutineScope {
     }
 
 }
+
+data class Response(val data: List<Bmf> = listOf(), val error: Throwable? = null)

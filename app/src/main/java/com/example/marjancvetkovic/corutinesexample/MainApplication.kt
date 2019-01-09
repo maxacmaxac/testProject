@@ -12,7 +12,7 @@ open class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Stetho.initializeWithDefaults(this);
+        Stetho.initializeWithDefaults(this)
 
         appComponent = initDagger(this)
     }
