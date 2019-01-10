@@ -9,7 +9,7 @@ import com.example.marjancvetkovic.corutinesexample.R
 import com.example.marjancvetkovic.corutinesexample.model.Bmf
 import kotlinx.android.synthetic.main.bmf_row.view.*
 
-class BmfAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<SimpleViewHolder>() {
+class BmfAdapter : RecyclerView.Adapter<SimpleViewHolder>() {
 
     private var dataList: List<Bmf> = arrayListOf()
 
