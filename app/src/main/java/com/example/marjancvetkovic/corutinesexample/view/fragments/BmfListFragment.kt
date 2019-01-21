@@ -52,7 +52,9 @@ class BmfListFragment : androidx.fragment.app.Fragment() {
         officeViewModel.getBmfs().consumeEach {
             withContext(Dispatchers.Main) {
                 if (it.error != null) {
-                    Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
+                    if (this@BmfListFragment.isAdded) {
+                        Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
+                    }
                 } else {
                     adapter.setData(it.data)
                 }
