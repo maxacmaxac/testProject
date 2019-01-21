@@ -17,18 +17,11 @@ class BmfViewModel(private val bmfRepo: BmfRepo) : ViewModel(), CoroutineScope {
 
     fun loadData() {
         launch {
-            try {
-                val response = try {
-                    Response(bmfRepo.getOffices())
-                } catch (e: Exception) {
-                    Response(error = e)
-                }
-                channel.send(response)
-            } catch (e: Exception){
-                e.message
-            }
-
-            channel.isEmpty
+            channel.send(try {
+                Response(bmfRepo.getOffices())
+            } catch (e: Exception) {
+                Response(error = e)
+            })
         }
     }
 
