@@ -25,13 +25,18 @@ android {
     androidExtensions {
         experimental = true
     }
+    kotlin {
+        experimental {
+            coroutines "enable"
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.facebook.stetho:stetho:1.5.0'
@@ -74,4 +79,5 @@ dependencies {
 
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test:rules:1.1.0'
+    implementation 'com.google.android.material:material:1.0.0'
 }

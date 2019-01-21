@@ -1,35 +1,38 @@
 package com.example.marjancvetkovic.corutinesexample.viewModel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.marjancvetkovic.corutinesexample.db.BmfRepo
 import com.example.marjancvetkovic.corutinesexample.model.Bmf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import java.lang.Exception
-import javax.inject.Inject
 
-class BmfViewModel() : ViewModel(), CoroutineScope {
+class BmfViewModel(private val bmfRepo: BmfRepo) : ViewModel(), CoroutineScope {
 
     private val job = Job()
     override val coroutineContext = job + Dispatchers.IO
-    private var officesLiveData: MutableLiveData<Response> = MutableLiveData()
+    private val channel = Channel<Response>()
 
-    @Inject
-    constructor(bmfRepo: BmfRepo) : this() {
+    fun loadData() {
         launch {
             try {
-                officesLiveData.postValue(Response(bmfRepo.getOffices()))
-            } catch (e: Exception) {
-                officesLiveData.postValue(Response(error = e))
+                val response = try {
+                    Response(bmfRepo.getOffices())
+                } catch (e: Exception) {
+                    Response(error = e)
+                }
+                channel.send(response)
+            } catch (e: Exception){
+                e.message
             }
+
+            channel.isEmpty
         }
     }
 
-
-    fun getBmfs() = officesLiveData
+    fun getBmfs() = channel
 
     override fun onCleared() {
         job.cancel()

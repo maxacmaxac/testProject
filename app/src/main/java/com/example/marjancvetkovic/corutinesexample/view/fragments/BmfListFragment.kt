@@ -5,15 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.marjancvetkovic.corutinesexample.MainApplication
 import com.example.marjancvetkovic.corutinesexample.R
 import com.example.marjancvetkovic.corutinesexample.view.adapters.BmfAdapter
 import com.example.marjancvetkovic.corutinesexample.viewModel.BmfModelFactory
 import com.example.marjancvetkovic.corutinesexample.viewModel.BmfViewModel
-import com.example.marjancvetkovic.corutinesexample.viewModel.Response
 import kotlinx.android.synthetic.main.list_fragment.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.consumeEach
 import javax.inject.Inject
 
 class BmfListFragment : androidx.fragment.app.Fragment() {
@@ -24,16 +26,6 @@ class BmfListFragment : androidx.fragment.app.Fragment() {
     private lateinit var officeViewModel: BmfViewModel
 
     private lateinit var adapter: BmfAdapter
-
-    private val dataObserver: Observer<Response> = Observer { data ->
-        data?.let {
-            if (it.error != null) {
-                Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
-            } else {
-                adapter.setData(it.data)
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,23 +41,28 @@ class BmfListFragment : androidx.fragment.app.Fragment() {
         super.onViewCreated(view, savedInstanceState)
         adapter = BmfAdapter()
         listView.adapter = adapter
-        listView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
-        listView.addItemDecoration(
-                androidx.recyclerview.widget.DividerItemDecoration(
-                        context,
-                        androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
-                )
-        )
+        listView.layoutManager = LinearLayoutManager(context)
+        listView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        subscribeBmfs()
+
+        floatingActionButton.setOnClickListener { officeViewModel.loadData() }
+    }
+
+    private fun subscribeBmfs() = GlobalScope.launch {
+        officeViewModel.getBmfs().consumeEach {
+            withContext(Dispatchers.Main) {
+                if (it.error != null) {
+                    Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
+                } else {
+                    adapter.setData(it.data)
+                }
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        officeViewModel.getBmfs().observe(this, dataObserver)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        officeViewModel.getBmfs().removeObserver(dataObserver)
+        officeViewModel.loadData()
     }
 
     companion object {
