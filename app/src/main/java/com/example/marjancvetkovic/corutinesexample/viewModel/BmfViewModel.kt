@@ -19,7 +19,7 @@ class BmfViewModel(val bmfRepo: BmfRepo) : ViewModel(), CoroutineScope {
     private val channel = Channel<Response>()
 
     fun loadData() {
-        launch {
+        launch(Dispatchers.IO) {
             channel.send(
                 try {
                     val elements = bmfRepo.getOffices()
