@@ -2,7 +2,6 @@ package com.example.marjancvetkovic.corutinesexample
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import com.example.marjancvetkovic.corutinesexample.mock.MockBmfViewModel
 import com.example.marjancvetkovic.corutinesexample.model.Bmf
