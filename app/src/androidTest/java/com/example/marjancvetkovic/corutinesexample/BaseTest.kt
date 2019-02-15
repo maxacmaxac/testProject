@@ -2,7 +2,6 @@ package com.example.marjancvetkovic.corutinesexample
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import androidx.core.content.edit
 import androidx.recyclerview.widget.RecyclerView
@@ -28,7 +27,7 @@ open class BaseTest {
     @JvmField
     val activityRuleMainActivity = ActivityTestRule(MainActivity::class.java, true, false)
 
-    protected lateinit var targetContext: Context
+    private lateinit var targetContext: Context
     private lateinit var mockedWebServer: MockWebServer
     private lateinit var bmfDao: BmfDao
 
@@ -51,7 +50,7 @@ open class BaseTest {
         val response = try {
             fileName.readJsonFile()
         } catch (e: IOException) {
-            ""
+            throw Exception("can not read file $fileName")
         }
         mockedWebServer.enqueue(
             MockResponse()
@@ -62,19 +61,15 @@ open class BaseTest {
     }
 
     private fun mockWebServer() {
-        mockedWebServer = MockWebServer()
-        try {
-            mockedWebServer.start()
-        } catch (e: IOException) {
-            Log.e("", e.message)
+        mockedWebServer = MockWebServer().apply {
+            start()
+        }.also {
+            BmfApi.BASE_URL = it.url("/").toString()
         }
-
-        BmfApi.BASE_URL = mockedWebServer.url("/").toString()
     }
 
     fun launchMainActivity() {
-        val intent = Intent()
-        activityRuleMainActivity.launchActivity(intent)
+        activityRuleMainActivity.launchActivity(Intent())
     }
 
     private fun checkListViewSize(size: Int): Matcher<View> {
@@ -96,8 +91,6 @@ open class BaseTest {
     fun String.readJsonFile(): String {
         val inputStream = InstrumentationRegistry.getInstrumentation().context.assets.open(this)
         val source = Okio.buffer(Okio.source(inputStream))
-        val result = source.readUtf8()
-        source.close()
-        return result
+        return source.readUtf8().apply { source.close() }
     }
 }
