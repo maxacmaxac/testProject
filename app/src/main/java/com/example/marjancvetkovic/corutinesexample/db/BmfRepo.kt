@@ -2,13 +2,15 @@ package com.example.marjancvetkovic.corutinesexample.db
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.example.marjancvetkovic.corutinesexample.OpenClassOnDebug
 import com.example.marjancvetkovic.corutinesexample.model.Bmf
 import com.example.marjancvetkovic.corutinesexample.network.BmfApi
 import java.util.concurrent.TimeUnit
 
+@OpenClassOnDebug
 class BmfRepo(
-        private val bmfDao: BmfDao, private val bmfApi: BmfApi,
-        private val sharedPreferences: SharedPreferences
+    private val bmfDao: BmfDao, private val bmfApi: BmfApi,
+    private val sharedPreferences: SharedPreferences
 ) {
     suspend fun getOffices(): List<Bmf> {
         if (sharedPreferences.getLong(BMF_LIST_KEY, 0) < System.currentTimeMillis()) {

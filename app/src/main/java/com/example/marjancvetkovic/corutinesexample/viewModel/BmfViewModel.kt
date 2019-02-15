@@ -1,6 +1,8 @@
 package com.example.marjancvetkovic.corutinesexample.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.marjancvetkovic.corutinesexample.OpenClassOnDebug
 import com.example.marjancvetkovic.corutinesexample.db.BmfRepo
 import com.example.marjancvetkovic.corutinesexample.model.Bmf
 import kotlinx.coroutines.CoroutineScope
@@ -9,7 +11,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 
-class BmfViewModel(private val bmfRepo: BmfRepo) : ViewModel(), CoroutineScope {
+@OpenClassOnDebug
+class BmfViewModel(val bmfRepo: BmfRepo) : ViewModel(), CoroutineScope {
 
     private val job = Job()
     override val coroutineContext = job + Dispatchers.IO
@@ -17,11 +20,15 @@ class BmfViewModel(private val bmfRepo: BmfRepo) : ViewModel(), CoroutineScope {
 
     fun loadData() {
         launch {
-            channel.send(try {
-                Response(bmfRepo.getOffices())
-            } catch (e: Exception) {
-                Response(error = e)
-            })
+            channel.send(
+                try {
+                    val elements = bmfRepo.getOffices()
+                    Response.Success(elements)
+                } catch (e: Exception) {
+                    Log.e("", e.toString())
+                    Response.Error(error = e)
+                }
+            )
         }
     }
 
@@ -33,4 +40,7 @@ class BmfViewModel(private val bmfRepo: BmfRepo) : ViewModel(), CoroutineScope {
 
 }
 
-data class Response(val data: List<Bmf> = listOf(), val error: Throwable? = null)
+sealed class Response {
+    class Success(val data: List<Bmf> = listOf()) : Response()
+    class Error(val error: Throwable? = null) : Response()
+}

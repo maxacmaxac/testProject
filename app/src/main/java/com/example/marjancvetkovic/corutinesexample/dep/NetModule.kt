@@ -1,7 +1,6 @@
 package com.example.marjancvetkovic.corutinesexample.dep
 
 import com.example.marjancvetkovic.corutinesexample.network.BmfApi
-import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides

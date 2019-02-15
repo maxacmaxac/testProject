@@ -28,12 +28,12 @@ open class BaseTest {
     @JvmField
     val activityRuleMainActivity = ActivityTestRule(MainActivity::class.java, true, false)
 
-    private lateinit var targetContext: Context
+    protected lateinit var targetContext: Context
     private lateinit var mockedWebServer: MockWebServer
     private lateinit var bmfDao: BmfDao
 
     @Before
-    fun setup() {
+    open fun setup() {
         val mInstrumentation = InstrumentationRegistry.getInstrumentation()
         targetContext = mInstrumentation.targetContext
 
@@ -49,7 +49,7 @@ open class BaseTest {
     fun mockWebServerAndDownloadData(fileName: String) {
         mockWebServer()
         val response = try {
-            readJsonFile(fileName)
+            fileName.readJsonFile()
         } catch (e: IOException) {
             ""
         }
@@ -93,8 +93,8 @@ open class BaseTest {
         Espresso.onView(ViewMatchers.withId(recyclerViewId)).check(ViewAssertions.matches(checkListViewSize(size)))
     }
 
-    private fun readJsonFile(filename: String): String {
-        val inputStream = InstrumentationRegistry.getInstrumentation().context.assets.open(filename)
+    fun String.readJsonFile(): String {
+        val inputStream = InstrumentationRegistry.getInstrumentation().context.assets.open(this)
         val source = Okio.buffer(Okio.source(inputStream))
         val result = source.readUtf8()
         source.close()

@@ -5,25 +5,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.marjancvetkovic.corutinesexample.MainApplication
+import com.example.marjancvetkovic.corutinesexample.OpenClassOnDebug
 import com.example.marjancvetkovic.corutinesexample.R
 import com.example.marjancvetkovic.corutinesexample.view.adapters.BmfAdapter
 import com.example.marjancvetkovic.corutinesexample.viewModel.BmfModelFactory
 import com.example.marjancvetkovic.corutinesexample.viewModel.BmfViewModel
+import com.example.marjancvetkovic.corutinesexample.viewModel.Response
 import kotlinx.android.synthetic.main.list_fragment.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.consumeEach
 import javax.inject.Inject
 
-class BmfListFragment : androidx.fragment.app.Fragment() {
+@OpenClassOnDebug
+class BmfListFragment : androidx.fragment.app.Fragment(), CoroutineScope {
+    private val job = Job()
+    override val coroutineContext = job + Dispatchers.IO
 
     @Inject
     lateinit var bmfModelFactory: BmfModelFactory
 
-    private lateinit var officeViewModel: BmfViewModel
+    lateinit var officeViewModel: BmfViewModel
 
     private lateinit var adapter: BmfAdapter
 
@@ -45,18 +51,22 @@ class BmfListFragment : androidx.fragment.app.Fragment() {
         listView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         subscribeBmfs()
 
-        floatingActionButton.setOnClickListener { officeViewModel.loadData() }
+        floatingActionButton.setOnClickListener {
+            officeViewModel.loadData()
+        }
     }
 
-    private fun subscribeBmfs() = GlobalScope.launch {
+    fun subscribeBmfs() = launch {
         officeViewModel.getBmfs().consumeEach {
             withContext(Dispatchers.Main) {
-                if (it.error != null) {
-                    if (this@BmfListFragment.isAdded) {
-                        Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
+                when {
+                    it is Response.Error && this@BmfListFragment.isAdded -> {
+                        Toast.makeText(context, "${it.error}", Toast.LENGTH_LONG).show()
+                        adapter.setData(emptyList())
                     }
-                } else {
-                    adapter.setData(it.data)
+                    it is Response.Success -> {
+                        adapter.setData(it.data)
+                    }
                 }
             }
         }
@@ -65,6 +75,11 @@ class BmfListFragment : androidx.fragment.app.Fragment() {
     override fun onResume() {
         super.onResume()
         officeViewModel.loadData()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 
     companion object {
