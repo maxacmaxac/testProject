@@ -5,11 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.example.marjancvetkovic.corutinesexample.OpenClassOnDebug
 import com.example.marjancvetkovic.corutinesexample.db.BmfRepo
 import com.example.marjancvetkovic.corutinesexample.model.Bmf
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
 
 @OpenClassOnDebug
 class BmfViewModel(val bmfRepo: BmfRepo) : ViewModel(), CoroutineScope {
@@ -22,7 +19,7 @@ class BmfViewModel(val bmfRepo: BmfRepo) : ViewModel(), CoroutineScope {
         launch(Dispatchers.IO) {
             channel.send(
                 try {
-                    val elements = bmfRepo.getOffices()
+                    val elements = withTimeout(5000) { bmfRepo.getOffices() }
                     Response.Success(elements)
                 } catch (e: Exception) {
                     Log.e("", e.toString())
