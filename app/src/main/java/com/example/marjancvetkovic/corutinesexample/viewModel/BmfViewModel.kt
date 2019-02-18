@@ -13,7 +13,7 @@ class BmfViewModel(val bmfRepo: BmfRepo) : ViewModel(), CoroutineScope {
 
     private val job = Job()
     override val coroutineContext = job + Dispatchers.IO
-    private val channel = Channel<Response>()
+    protected val channel = Channel<Response>()
 
     fun loadData() {
         launch(Dispatchers.IO) {

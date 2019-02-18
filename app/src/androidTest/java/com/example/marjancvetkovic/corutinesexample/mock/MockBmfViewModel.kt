@@ -12,22 +12,10 @@ import kotlinx.coroutines.launch
 import org.mockito.Mockito
 
 @OpenClassOnDebug
-class MockBmfViewModel(val response: Response) : BmfViewModel(Mockito.mock(BmfRepo::class.java)), CoroutineScope {
-
-    private val job = Job()
-    override val coroutineContext = job + Dispatchers.IO
-    val channel = Channel<Response>()
-
+class MockBmfViewModel(val response: Response) : BmfViewModel(Mockito.mock(BmfRepo::class.java)) {
     override fun loadData() {
         launch {
             channel.send(response)
         }
     }
-
-    override fun getBmfs() = channel
-
-    override fun onCleared() {
-        job.cancel()
-    }
-
 }
