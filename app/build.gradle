@@ -46,7 +46,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
-    implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
@@ -57,15 +57,15 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
-    implementation 'androidx.room:room-runtime:2.1.0-alpha02'
-    kapt 'androidx.room:room-compiler:2.1.0-alpha02'
+    implementation 'androidx.room:room-runtime:2.1.0-alpha04'
+    kapt 'androidx.room:room-compiler:2.1.0-alpha04'
 
     implementation 'com.google.dagger:dagger:2.16'
-    implementation 'com.google.dagger:dagger-android:2.15'
-    implementation 'com.google.dagger:dagger-android-support:2.15'
+    implementation 'com.google.dagger:dagger-android:2.16'
+    implementation 'com.google.dagger:dagger-android-support:2.16'
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.16'
-    kapt 'com.google.dagger:dagger-compiler:2.15'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.15'
+    kapt 'com.google.dagger:dagger-compiler:2.16'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.16'
     kapt 'com.google.dagger:dagger-android-processor:2.16'
 
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
@@ -75,24 +75,24 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
 
     testImplementation "androidx.arch.core:core-testing:2.0.0"
-    testImplementation "androidx.room:room-testing:2.1.0-alpha02"
+    testImplementation "androidx.room:room-testing:2.1.0-alpha04"
     testImplementation 'junit:junit:4.12'
 
-    androidTestImplementation 'androidx.room:room-testing:2.1.0-alpha02'
-    androidTestImplementation 'androidx.test:runner:1.1.1-alpha01'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-alpha01'
-    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.8.0'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'androidx.room:room-testing:2.1.0-alpha04'
+    androidTestImplementation 'androidx.test:runner:1.1.2-alpha01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.2-alpha01'
+    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.11.0'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
     androidTestImplementation "androidx.arch.core:core-testing:2.0.0"
-    androidTestImplementation "androidx.room:room-testing:2.1.0-alpha02"
+    androidTestImplementation "androidx.room:room-testing:2.1.0-alpha04"
     androidTestImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.linkedin.dexmaker:dexmaker-mockito:2.19.1'
-//    androidTestImplementation group: 'com.nhaarman.mockitokotlin2', name: 'mockito-kotlin', version: '2.1.0'
     androidTestImplementation "org.mockito:mockito-core:2.24.0"
 
 
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test:rules:1.1.0'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
 }

@@ -17,9 +17,11 @@ import com.example.marjancvetkovic.corutinesexample.viewModel.BmfViewModel
 import com.example.marjancvetkovic.corutinesexample.viewModel.Response
 import kotlinx.android.synthetic.main.list_fragment.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import javax.inject.Inject
 
+@ObsoleteCoroutinesApi
 @OpenClassOnDebug
 class BmfListFragment : androidx.fragment.app.Fragment(), CoroutineScope {
     private val job = Job()
@@ -31,6 +33,8 @@ class BmfListFragment : androidx.fragment.app.Fragment(), CoroutineScope {
     lateinit var officeViewModel: BmfViewModel
 
     private lateinit var adapter: BmfAdapter
+
+    protected val channel: Channel<Response> = Channel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,21 +55,19 @@ class BmfListFragment : androidx.fragment.app.Fragment(), CoroutineScope {
         subscribeBmfs()
 
         floatingActionButton.setOnClickListener {
-            officeViewModel.loadData()
+            launch(Dispatchers.IO) { officeViewModel.loadData(channel) }
         }
     }
 
-    fun subscribeBmfs() = launch {
-        officeViewModel.getBmfs().consumeEach {
-            withContext(Dispatchers.Main) {
-                when {
-                    it is Response.Error && this@BmfListFragment.isAdded -> {
-                        Toast.makeText(context, "${it.error}", Toast.LENGTH_LONG).show()
-                        adapter.setData(emptyList())
-                    }
-                    it is Response.Success -> {
-                        adapter.setData(it.data)
-                    }
+    fun subscribeBmfs() = launch(Dispatchers.Main) {
+        channel.consumeEach {
+            when {
+                it is Response.Error && this@BmfListFragment.isAdded -> {
+                    Toast.makeText(context, "${it.error}", Toast.LENGTH_LONG).show()
+                    adapter.setData(emptyList())
+                }
+                it is Response.Success -> {
+                    adapter.setData(it.data)
                 }
             }
         }
@@ -73,7 +75,7 @@ class BmfListFragment : androidx.fragment.app.Fragment(), CoroutineScope {
 
     override fun onResume() {
         super.onResume()
-        officeViewModel.loadData()
+        launch(Dispatchers.IO) { officeViewModel.loadData(channel) }
     }
 
     override fun onDestroy() {

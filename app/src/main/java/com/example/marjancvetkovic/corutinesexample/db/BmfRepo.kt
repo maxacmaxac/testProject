@@ -13,10 +13,10 @@ class BmfRepo(
     private val sharedPreferences: SharedPreferences
 ) {
     suspend fun getOffices(): List<Bmf> {
-        if (sharedPreferences.getLong(BMF_LIST_KEY, 0) < System.currentTimeMillis()) {
-            val offices = bmfApi.getBmfOffices()
+        if (bmfDao.allOffices.isEmpty() || sharedPreferences.getLong(BMF_LIST_KEY, 0) < System.currentTimeMillis()) {
+            val offices = bmfApi.getBmfOffices().await()
             bmfDao.deleteAll()
-            bmfDao.insertAll(offices.await())
+            bmfDao.insertAll(offices)
             sharedPreferences.edit { putLong(BMF_LIST_KEY, System.currentTimeMillis() + TimeUnit.HOURS.toMillis(4)) }
         }
         return bmfDao.allOffices
